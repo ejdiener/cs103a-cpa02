@@ -33,10 +33,7 @@ const courses = require('./public/data/courses20-21.json')
 // *********************************************************** //
 
 const mongoose = require( 'mongoose' );
-//const mongodb_URI = 'mongodb://localhost:27017/cs103a_todo'
-const mongodb_URI = 'mongodb+srv://cs_sj:BrandeisSpr22@cluster0.kgugl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-//mongodb+srv://cs103a:<password>@cluster0.kgugl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
+const mongodb_URI = 'mongodb+srv://CS103a:CPA02@cs103acpa2.hnxt3.mongodb.net/test'
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
 // fix deprecation warnings
 mongoose.set('useFindAndModify', false); 
@@ -45,10 +42,6 @@ mongoose.set('useCreateIndex', true);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {console.log("we are connected!!!")});
-
-
-
-
 
 // *********************************************************** //
 // Initializing the Express server 
@@ -60,8 +53,6 @@ const app = express();
 // Here we specify that we will be using EJS as our view engine
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
-
 
 // this allows us to use page layout for the views 
 // so we don't have to repeat the headers and footers on every page ...
@@ -111,14 +102,29 @@ app.get("/", (req, res, next) => {
 });
 
 app.get("/about", (req, res, next) => {
-  res.render("about");
+  res.render("aboutDevs");
 });
 
+// *********************************************************** //
+//  Elizabeth Diener's Code
+// *********************************************************** //
+
+app.get('/userNPCs',
+    isLoggedIn, async(req,res,next) => {
+        try {
+            let userId = res.locals.user._id;  // get the user's id
+            let items = await NPC.find({userId:userId}); // lookup the user's NPCs
+        } catch (e) {
+            next(e)
+        }
+    }
+)
 
 
-/*
-    ToDoList routes
-*/
+
+// *********************************************************** //
+//  To-Do List Routes
+// *********************************************************** //
 app.get('/todo',
   isLoggedIn,   // redirect to /login if user is not logged in
   async (req,res,next) => {
@@ -126,29 +132,27 @@ app.get('/todo',
       let userId = res.locals.user._id;  // get the user's id
       let items = await ToDoItem.find({userId:userId}); // lookup the user's todo items
       res.locals.items = items;  //make the items available in the view
-      res.render("toDo");  // render to the toDo page
+      res.render("_toDo");  // render to the toDo page
     } catch (e){
       next(e);
     }
-  }
-  )
+  })
 
   app.post('/todo/add',
-  isLoggedIn,
-  async (req,res,next) => {
-    try{
-      const {title,description} = req.body; // get title and description from the body
-      const userId = res.locals.user._id; // get the user's id
-      const createdAt = new Date(); // get the current date/time
-      let data = {title, description, userId, createdAt,} // create the data object
-      let item = new ToDoItem(data) // create the database object (and test the types are correct)
-      await item.save() // save the todo item in the database
-      res.redirect('/todo')  // go back to the todo page
-    } catch (e){
-      next(e);
-    }
-  }
-  )
+    isLoggedIn,
+    async (req,res,next) => {
+      try {
+        const {title,description} = req.body; // get title and description from the body
+        const userId = res.locals.user._id; // get the user's id
+        const createdAt = new Date(); // get the current date/time
+        let data = {title, description, userId, createdAt,} // create the data object
+        let item = new ToDoItem(data) // create the database object (and test the types are correct)
+        await item.save() // save the todo item in the database
+        res.redirect('/todo')  // go back to the todo page
+      } catch (e){
+        next(e);
+      }
+    })
 
   app.get("/todo/delete/:itemId",
     isLoggedIn,
@@ -160,8 +164,7 @@ app.get('/todo',
       } catch (e){
         next(e);
       }
-    }
-  )
+    })
 
   app.get("/todo/completed/:value/:itemId",
   isLoggedIn,
@@ -191,7 +194,6 @@ function getNum(coursenum){
   return coursenum.slice(0,i);
 }
 
-
 function times2str(times){
   // convert a course.times object into a list of strings
   // e.g ["Lecture:Mon,Wed 10:00-10:50","Recitation: Thu 5:00-6:30"]
@@ -200,8 +202,8 @@ function times2str(times){
   } else {
     return times.map(x => time2str(x))
   }
-  
 }
+
 function min2HourMin(m){
   // converts minutes since midnight into a time string, e.g.
   // 605 ==> "10:05"  as 10:00 is 60*10=600 minutes after midnight
@@ -226,8 +228,6 @@ function time2str(time){
   return `${meetingType}: ${days.join(",")}: ${min2HourMin(start)}-${min2HourMin(end)} ${location}`
 }
 
-
-
 /* ************************
   Loading (or reloading) the data into a collection
    ************************ */
@@ -249,7 +249,6 @@ app.get('/upsertDB',
   }
 )
 
-
 app.post('/courses/bySubject',
   // show list of courses in a given subject
   async (req,res,next) => {
@@ -259,7 +258,7 @@ app.post('/courses/bySubject',
     res.locals.courses = courses
     res.locals.times2str = times2str
     //res.json(courses)
-    res.render('courselist')
+    res.render('_courselist')
   }
 )
 
@@ -271,7 +270,7 @@ app.get('/courses/show/:courseId',
     res.locals.course = course
     res.locals.times2str = times2str
     //res.json(course)
-    res.render('course')
+    res.render('_course')
   }
 )
 
@@ -282,7 +281,7 @@ app.get('/courses/byInst/:email',
     const courses = await Course.find({instructor:email,independent_study:false})
     //res.json(courses)
     res.locals.courses = courses
-    res.render('courselist')
+    res.render('_courselist')
   } 
 )
 
@@ -297,7 +296,7 @@ app.post('/courses/byInst',
     //res.json(courses)
     res.locals.courses = courses
     res.locals.times2str = times2str
-    res.render('courselist')
+    res.render('_courselist')
   }
 )
 
@@ -331,7 +330,7 @@ app.get('/schedule/show',
                         .sort(x => x.term)
                         .map(x => x.courseId)
       res.locals.courses = await Course.find({_id:{$in: courseIds}})
-      res.render('schedule')
+      res.render('_schedule')
     } catch(e){
       next(e)
     }
@@ -352,7 +351,6 @@ app.get('/schedule/remove/:courseId',
     }
   }
 )
-
 
 // here we catch 404 errors and forward to error handler
 app.use(function(req, res, next) {
