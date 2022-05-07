@@ -1,0 +1,71 @@
+<div class="jumbotron">
+    <h1>
+        <% if (npc.titleName.length > 0) { %> <%= npc.titleName %> <% } %>
+        <% if (npc.firstName.length > 0) { %> <%= npc.firstName %> <% } %>
+        <% if (npc.middleName.length > 0) { %> <%= npc.middleName %> <% } %>
+        <% if (npc.lastName.length > 0) { %> <%= npc.lastName %> <% } %>
+        <% if (npc.suffixName.length > 0) { %> <%= npc.suffixName %> <% } %>
+    </h1>
+</div>
+<hr>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <%= npc.blurb %>
+        </div>
+        <div class="col">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th colspan="2">
+                        <% if (npc.titleName.length > 0) { %> <%= npc.titleName %> <% } %>
+                        <% if (npc.firstName.length > 0) { %> <%= npc.firstName %> <% } %>
+                        <% if (npc.middleName.length > 0) { %> <%= npc.middleName %> <% } %>
+                        <% if (npc.lastName.length > 0) { %> <%= npc.lastName %> <% } %>
+                        <% if (npc.suffixName.length > 0) { %> <%= npc.suffixName %> <% } %>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Species</td>
+                        <td><%= npc.species %></td>
+                    </tr>
+                    <tr>
+                        <td>Age</td>
+                        <td><%= npc.ageInYears %></td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td><%= npc.gender %></td>
+                    </tr>
+                    <tr>
+                        <td>Pronouns</td>
+                        <td><%= npc.pronouns %></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>Appearance</h2>
+<p><%= npc.appearance %></p>
+<h2>Personality</h2>
+<p><%= npc.personality %></p>
+<h2>Home</h2>
+<p><%= npc.home %></p>
+<h2>Job</h2>
+<p><%= npc.job %></p>
+<h2>Relationships</h2>
+<p><%= npc.relationships %></p>
+<hr>
+<div class="container">
+    <div class="row">
+        <% for (tag of tags) { %>
+            <div class="col">
+                <p class="p-3 m-3 border border-primary bg-light">
+                    <a href="/search/tag/<%= tag.name.split(' ').join('_') %>"><%= tag.name %></a>
+                </p>
+            </div>
+        <% } %>
+    </div>
+</div>

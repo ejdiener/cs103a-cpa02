@@ -24,8 +24,8 @@ Here we want a ul list with the instructor, coursenum, title, term
         <td>
             <a href="/courses/show/<%=course._id %>">
             <%=  course['subject'] %>
-            <%=  course['coursenum'] %>  
-            (Section <%=  course['section'] %>) 
+            <%=  course['coursenum'] %>
+            (Section <%=  course['section'] %>)
 
             </a>
         </td>
@@ -39,12 +39,12 @@ Here we want a ul list with the instructor, coursenum, title, term
         </td>
 
         <td>
-        <% for (t of times2str(course.times)){%> 
-            <%= t %> <br> 
+        <% for (t of times2str(course.times)){%>
+            <%= t %> <br>
         <%} %>
         </td>
          <!-- <%= JSON.stringify(course.times) %> <br> -->
-        
+
 
         <td>
           <%= inst[0]+" "+inst[1]%> <br> <%= " ("+inst[2]+")" %>

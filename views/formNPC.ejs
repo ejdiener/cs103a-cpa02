@@ -1,0 +1,81 @@
+<div class="jumbotron"><h1> Create New NPC </h1></div>
+
+<% if (true || loggedIn) { %>
+    <form method="post" action="/createNPC">
+        <h2> Demographic Info </h2>
+        Enter the name of your NPC:
+        <table>
+            <thead>
+                <td>Title</td>
+                <td>First name</td>
+                <td>Middle name</td>
+                <td>Last name</td>
+                <td>Suffix</td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="titleName"></td>
+                    <td><input type="text" name="firstName"></td>
+                    <td><input type="text" name="middleName"></td>
+                    <td><input type="text" name="lastName"></td>
+                    <td><input type="text" name="suffixName"></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>Gender:
+        <select class="form-control-sm" id="gender">
+            <option></option>
+            <option>Non-binary</option>
+            <option>Man</option>
+            <option>Woman</option>
+            <option>Transman</option>
+            <option>Transwoman</option>
+            <option>Agender</option>
+            <option>Bigender</option>
+            <option>Genderfluid</option>
+            <option>Genderflux</option>
+            <option>Genderqueer</option>
+            <option>Agender</option>
+            <option>Bigender</option>
+            <option>Demi-man</option>
+            <option>Demi-woman</option>
+        </select>
+        <br><br>Pronouns:<br>
+        <input type="checkbox" name="pronouns" value="she/her/hers"> she/her/hers<br>
+        <input type="checkbox" name="pronouns" value="he/him/his"> he/him/his<br>
+        <input type="checkbox" name="pronouns" value="they/them/theirs"> they/them/theirs<br>
+        <input type="checkbox" name="pronouns" value="xe/xir/xem"> xe/xir/xem<br><br>
+        Species: <input type="text" name="species"><br><br>
+        Age in years: <input type="number" name="ageInYears"><br>
+        <hr>
+        <h2> Detailed Info </h2>
+        <br>Enter a short blurb introducing your character<br>
+        <textarea name="blurb"></textarea><br><br>
+        Describe your NPC's appearance<br>
+        <textarea name="appearance"></textarea><br><br>
+        Describe your NPC's personality<br>
+        <textarea name="personality"></textarea><br><br>
+        Describe the place your NPC lives<br>
+        <textarea name="home"></textarea><br><br>
+        Describe your NPC's job<br>
+        <textarea name="job"></textarea><br><br>
+        Describe your NPC's close relationships<br>
+        <textarea name="relationships"></textarea><br><br>
+        Describe your NPC's likes<br>
+        <textarea name="likes"></textarea><br><br>
+        Describe your NPC's dislikes<br>
+        <textarea name="dislikes"></textarea><br><br>
+        Describe your NPC's goals<br>
+        <textarea name="goals"></textarea><br><br>
+        <hr>
+        <h2> Tags </h2>
+        Enter up to 5 tags.<br>
+        <input type="text" name="tag1"><br>
+        <input type="text" name="tag2"><br>
+        <input type="text" name="tag3"><br>
+        <input type="text" name="tag4"><br>
+        <input type="text" name="tag5"><br>
+        <hr>
+        <input type="submit">
+    </form>
+<% } %>

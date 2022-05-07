@@ -109,18 +109,212 @@ app.get("/about", (req, res, next) => {
 //  Elizabeth Diener's Code
 // *********************************************************** //
 
-app.get('/userNPCs',
+const User = require('./models/User.js');
+const NPC = require('./models/NPC.js');
+const Tag = require('./models/Tag.js');
+
+app.get('/profile/:userId',
     isLoggedIn, async(req,res,next) => {
         try {
-            let userId = res.locals.user._id;  // get the user's id
-            let items = await NPC.find({userId:userId}); // lookup the user's NPCs
+            let userId = req.params.userId;  // get the user's id
+            res.locals.user = await User.find({_id: userId});
+            res.locals.npcs = await NPC.find({userId: userId}); // lookup the user's NPCs
+            let myUserId = res.locals.user._id;
+            res.locals.isMine = userId === myUserId;    // take note if this is this user is the owner of the profile
+            res.render('userProfile')
         } catch (e) {
             next(e)
         }
-    }
-)
+    })
 
+app.get('/viewNPC/:npcId',
+    isLoggedIn, async(req,res,next) => {
+        try {
+            let npcId = req.params.npcId;
+            let npc = await NPC.findOne({_id: npcId});
+            let myUserId = res.locals.user._id;
+            res.locals.npc = npc;
+            res.locals.tags = await Tag.find({'_id' : {$in : npc.tags}});
+            res.locals.isMine = npc.userId.toString() === myUserId.toString();    // take note if this is this user is the owner of the profile
+            res.render('viewNPC')
+        } catch (e) {
+            next(e)
+        }
+    })
 
+app.get('/createNPC',
+    isLoggedIn, async(req,res,next) => {
+        try {
+            res.render('formNPC')
+        } catch (e) {
+            next(e)
+        }
+    })
+
+app.post('/createNPC',
+    isLoggedIn, async(req,res,next) => {
+        try {
+            let myUserId = res.locals.user._id;
+            let pronouns_array = req.body.pronouns;
+            if (typeof(pronouns_array) == "undefined"){
+                pronouns_array = [""]
+            } else if (typeof(pronouns_array) == "string") {
+                pronouns_array = [pronouns_array]
+            }
+
+            // Tag prep
+            const tag1 = req.body.tag1;
+            let tagOne = null;
+            if (tag1.length > 0) {
+                tagOne = await Tag.findOne( {name:tag1}, async function (err, result) {
+                    if (err) {}
+                    if (!result) {
+                        tagOne = new Tag({
+                            name: tag1,
+                            tagged: {},
+                            createdAt: new Date(),
+                        })
+                        await tagOne.save();
+                    }
+                });
+            } const tag2 = req.body.tag2;
+            let tagTwo = null;
+            if (tag2.length > 0) {
+                tagTwo = await Tag.findOne( {name:tag2}, async function (err, result) {
+                    if (err) {}
+                    if (!result) {
+                        tagTwo = new Tag({
+                            name: tag2,
+                            tagged: {},
+                            createdAt: new Date(),
+                        })
+                        await tagTwo.save();
+                    }
+                });
+            } const tag3 = req.body.tag3;
+            let tagThree = null;
+            if (tag3.length > 0) {
+                tagThree = await Tag.findOne( {name:tag3}, async function (err, result) {
+                    if (err) {}
+                    if (!result) {
+                        tagThree = new Tag({
+                            name: tag3,
+                            tagged: {},
+                            createdAt: new Date(),
+                        })
+                        await tagThree.save();
+                    }
+                });
+            } const tag4 = req.body.tag4;
+            let tagFour = null;
+            if (tag4.length > 0) {
+                tagFour = await Tag.findOne( {name:tag4}, async function (err, result) {
+                    if (err) {}
+                    if (!result) {
+                        tagFour = new Tag({
+                            name: tag4,
+                            tagged: {},
+                            createdAt: new Date(),
+                        })
+                        await tagFour.save();
+                    }
+                });
+            } const tag5 = req.body.tag5;
+            let tagFive = null;
+            if (tag5.length > 0) {
+                tagFive = await Tag.findOne({name: tag5}, async function (err, result) {
+                    if (err) {}
+                    if (!result) {
+                        tagFive = new Tag({
+                            name: tag5,
+                            tagged: {},
+                            createdAt: new Date(),
+                        })
+                        await tagFive.save();
+                    }
+                });
+            } const tag_array = [];
+            if (tagOne !== null) {
+                tag_array.push(tagOne._id);
+            } if (tagTwo !== null) {
+                tag_array.push(tagTwo._id);
+            } if (tagThree !== null) {
+                tag_array.push(tagThree._id);
+            } if (tagFour !== null) {
+                tag_array.push(tagFour._id);
+            } if (tagFive !== null) {
+                tag_array.push(tagFive._id);
+            }
+            const npc = new NPC({
+                userId: myUserId,
+                firstName: req.body.firstName,
+                middleName: req.body.middleName,
+                lastName: req.body.lastName,
+                suffixName: req.body.suffixName,
+                titleName: req.body.titleName,
+                species: req.body.species,
+                tags: tag_array,
+                ageInYears: req.body.ageInYears,
+                blurb: req.body.blurb,
+                appearance: req.body.appearance,
+                personality: req.body.personality,
+                home: req.body.home,
+                job: req.body.job,
+                relationships: req.body.relationships,
+                likes: req.body.likes,
+                dislikes: req.body.dislikes,
+                goals: req.body.goals,
+                pronouns: pronouns_array,
+                gender: req.body.gender,
+                createdAt: new Date(),
+                lastEdited: new Date(),
+            })
+            await npc.save();
+            res.redirect('/viewNPC/'+npc._id)
+        } catch (e) {
+            next(e)
+        }
+    })
+
+app.get('/search',
+    isLoggedIn, async(req, res, next) => {
+        try {
+            res.locals.npcs = [];
+            res.render('searchNPC')
+        } catch (e) {
+            next(e)
+        }
+    })
+
+app.get('/search/tag/:tagName',
+    isLoggedIn, async(req, res, next) => {
+        try {
+            let tagName = req.params.tagName.split('_').join(' ');
+            let tag = await Tag.findOne({name:tagName});
+            res.locals.npcs = await NPC.find({'tags': tag._id});
+            res.render('searchNPC')
+        } catch (e) {
+            next(e)
+        }
+    })
+
+app.post('/search/tag',
+    isLoggedIn, async(req, res, next) => {
+        try {
+            let tagName = req.body.tagName;
+            let tag = await Tag.findOne({name:tagName});
+            res.locals.npcs = await NPC.find({'tags': tag._id});
+            res.render('searchNPC')
+        } catch (e) {
+            next(e)
+        }
+    })
+
+app.get('/user/me',
+    isLoggedIn, async(req, res, next) => {
+        let myUserId = res.locals.user._id.toString();
+        res.redirect('/user/'+myUserId)
+    })
 
 // *********************************************************** //
 //  To-Do List Routes

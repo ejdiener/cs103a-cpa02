@@ -11,22 +11,29 @@ const NPCSchema = mongoose.Schema( {
     lastName: String,
     suffixName: String,
     titleName: String,
-    gender: String,
+
     species: String,
-    home: String,
+    tags: [ObjectId],
     // Number
     ageInYears: Number,
     // Textboxes
     blurb: String,
     appearance: String,
     personality: String,
+    home: String,
     job: String,
     relationships: String,
+
     likes: String,
     dislikes: String,
     goals: String,
+    // Checkboxes
+    pronouns: [String],
+    // Select
+    gender: String,
     // Date
     createdAt: Date,
+    lastEdited: Date,
 } );
 
 module.exports = mongoose.model( 'NPC', NPCSchema );
