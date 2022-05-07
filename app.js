@@ -316,6 +316,18 @@ app.get('/user/me',
         res.redirect('/user/'+myUserId)
     })
 
+app.get('/user/:userId',
+    isLoggedIn, async(req, res, next) => {
+        let userId = req.params.userId;
+        let myUserId = res.locals.user._id;
+        let thisUser = await User.find({_id: userId});
+        console.log(thisUser);
+        res.locals.thisUser = thisUser;
+        res.locals.npcs = await NPC.find({userId: userId});
+        res.locals.isMine = thisUser._id === myUserId.toString();    // take note if this is this user is the owner
+        res.render('userProfile')
+    })
+
 // *********************************************************** //
 //  To-Do List Routes
 // *********************************************************** //

@@ -1,0 +1,33 @@
+<div class="jumbotron"><h1> <%= user.username %> </h1></div>
+
+<% if (npcs.length > 0) { %>
+    <p>Here are <%= user.username %>'s NPCs:</p>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Gender</th>
+            <th>Blurb</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+        <% for (npc of npcs) { %>
+            <tr class="mb-2">
+                <td>
+                    <a href="/viewNPC/<%= npc._id %>">
+                        <% if (npc.titleName.length > 0) { %> <%= npc.titleName %> <% } %>
+                        <% if (npc.firstName.length > 0) { %> <%= npc.firstName %> <% } %>
+                        <% if (npc.middleName.length > 0) { %> <%= npc.middleName %> <% } %>
+                        <% if (npc.lastName.length > 0) { %> <%= npc.lastName %> <% } %>
+                        <% if (npc.suffixName.length > 0) { %> <%= npc.suffixName %> <% } %>
+                    </a>
+                </td>
+                <td><%= npc.species %></td>
+                <td><%= npc.gender %></td>
+                <td><%= npc.blurb %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+<% } %>
