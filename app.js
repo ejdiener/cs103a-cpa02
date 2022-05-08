@@ -33,7 +33,7 @@ const courses = require('./public/data/courses20-21.json')
 // *********************************************************** //
 
 const mongoose = require( 'mongoose' );
-const mongodb_URI = process.env.mongodb_URI
+const mongodb_URI = 'mongodb+srv://CS103a:CPA02@cs103acpa2.hnxt3.mongodb.net/test'
 mongoose.connect( mongodb_URI, { useNewUrlParser: true, useUnifiedTopology: true } );
 // fix deprecation warnings
 mongoose.set('useFindAndModify', false); 
@@ -586,7 +586,7 @@ app.set("port", port);
 const http = require("http");
 const server = http.createServer(app);
 
-server.listen(process.env.PORT || port);
+server.listen(port);
 
 function onListening() {
   var addr = server.address();
