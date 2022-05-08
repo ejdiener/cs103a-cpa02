@@ -2,22 +2,27 @@
 Available at: https://npc-opensource-database.herokuapp.com/
 
 ## Guide to the App
+https://drive.google.com/file/d/1OANAHE0OdMgxSfp2WJ_kxiv96VdInVzZ/view?usp=sharing
+
 ### Start by logging in:
+![](public/images/Screenshot_Login.png)
 | Not Logged In | Logged In    |
 |---------------|--------------|
 | ![](public/images/Screenshot_Home_notLoggedIn.png)  | ![](public/images/Screenshot_Home_LoggedIn.png) |
 
-![](public/images/Screenshot_Home_notLoggedIn.png)
-![](public/images/Screenshot_Home_LoggedIn.png)
-
 ### Create an NPC by clicking "Create New NPC" on the header
-
 | Empty        | Filled In    |
 |--------------|--------------|
 | ![](public/images/Screenshot_npcForm.png) | ![](public/images/Screenshot_npcForm_filled.png) |
 
-![](public/images/Screenshot_npcForm.png)
-![](public/images/Screenshot_npcForm_filled.png)
+### This will then display the resulting NPC page
+![](public/images/Screenshot_NPC.png)
+
+### You can search for an NPC by tag
+![](public/images/Screenshot_search.png)
+
+### Or look at your user profile and see all the NPCs you've made
+![](public/images/Screenshot_User.png)
 
 ## Installation to run the app locally
 1. Download this project from Github
